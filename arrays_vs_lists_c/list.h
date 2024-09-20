@@ -1,4 +1,6 @@
-#include <assert.h>
+
+// Maximum value that can be stored in unsigned: (2^32) - 1
+static const unsigned MAX = 4294967295;
 
 // Declarations
 typedef struct Node Node;
@@ -11,10 +13,6 @@ void destroy(Node* iter);
 void print_list(Node* iter);
 
 // Definitions
-
-// Maximum value that can be stored in unsigned: (2^32) - 1
-static const unsigned MAX = 4294967295;
-
 typedef struct Node {
 	int val;
 	struct Node* next;
