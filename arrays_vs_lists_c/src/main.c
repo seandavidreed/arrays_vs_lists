@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <string.h>
 #include <assert.h>
 #include <time.h>
@@ -60,10 +61,12 @@ double test_array(unsigned n, unsigned insert_idx) {
 }
 
 void test_changing_n(int cycles) {
+
 	// Declare variables
 	double array_runtimes[cycles];
 	double list_runtimes[cycles];
 	unsigned batches_n[cycles];
+
 	// Initialize batches
 	batches_n[0] = 1000000;
 	for (int i = 1; i < cycles; i++) {
@@ -83,27 +86,33 @@ void test_changing_n(int cycles) {
 		array_runtimes[i] = runtime;
 	}
 
-	// Save results to file
-	FILE* fp = fopen("data/test1_results.csv", "w");
-	char result[20000] = {};
-
-	strcat(result, "Elements,List,Array\n");
+	// Format results into one string
+	char result[4000] = {"Elements,List,Array\n"};
 	for (int i = 0; i < cycles; i++) {
-		char buffer[100] = {};
+		char buffer[40] = {};
 		sprintf(buffer, "%u,%f,%f\n", batches_n[i], list_runtimes[i], array_runtimes[i]);
-		strcat(result, buffer);
+		strncat(result, buffer, 27);
 	}
 
+	// Save to file
+	FILE* fp = fopen("../data/test1_results.csv", "w");
+	if (fp == NULL) {
+		printf("Failed to open file.\n%s.\nExiting...\n", strerror(errno));
+		exit(1);
+	}
 	fwrite(result, strlen(result), 1, fp);
 	fclose(fp);
 }
 
 void test_changing_insert() {
+
+	// Declare variables
 	int samples = 1000;
 	double runtime = 0.0;
 	double list_runtimes[samples];
 	double array_runtimes[samples];
 	
+	// Run cycles and collect runtimes
 	for (unsigned i = 1; i < samples; i++) {
 		runtime = test_list(100000, i*100 - 1);
 		printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, i*100 - 1, runtime);
@@ -114,17 +123,20 @@ void test_changing_insert() {
 		array_runtimes[i] = runtime;
 	}
 
-	// Save results to file
-	FILE* fp = fopen("data/test2_results.csv", "w");
-	char result[100000] = {};
-
-	strcat(result, "Insertion Index,List,Array\n");
+	// Format results into one string
+	char result[30000] = {"Insertion Index,List,Array\n"};
 	for (unsigned i = 0; i < samples; i++) {
-		char buffer[100] = {};
+		char buffer[40] = {};
 		sprintf(buffer, "%u,%f,%f\n", i*100, list_runtimes[i], array_runtimes[i]);
-		strcat(result, buffer);
+		strncat(result, buffer, 30);
 	}
 
+	// Save to file
+	FILE* fp = fopen("../data/test2_results.csv", "w");
+	if (fp == NULL) {
+		printf("Failed to open file.\n%s.\nExiting...\n", strerror(errno));
+		exit(1);
+	}
 	fwrite(result, strlen(result), 1, fp);
 	fclose(fp);
 }

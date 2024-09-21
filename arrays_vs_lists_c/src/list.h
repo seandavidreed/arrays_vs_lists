@@ -50,22 +50,21 @@ void attach(Node* iter, Node* new_node) {
 }
 
 Node* insert(Node* iter, Node* tail, Node* new_node, unsigned pos) {
-	while (1) {
-		if (pos == 0) {
-			attach(iter, new_node);
-			return tail;
-		}
-
+	unsigned i = 0;
+	for (; i < pos; i++) {
 		if (iter->next == NULL) break;
-		pos--;
-		iter = iter->next;	
+		iter = iter->next;
 	}
-	new_node->prev = iter;
-	iter->next = new_node;
 
-	if (pos == 1) return new_node;
-
-	return tail;
+	if (i == pos) {
+		attach(iter, new_node);
+		return tail;
+	}
+	else {
+		iter->next = new_node;
+		new_node->prev = iter;
+		return new_node;
+	}
 }
 
 Node* append(Node* tail, Node* new_node) {
