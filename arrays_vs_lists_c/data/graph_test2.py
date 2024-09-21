@@ -14,7 +14,7 @@ else:
 fig, ax = plt.subplots()
 ax.step(data["Insertion Index"], data["Array"], label="Array")
 ax.step(data["Insertion Index"], data["List"], label="List")
-ax.set_title("Time as a Function of Insertion: Varying the Index")
+ax.set_title("Constant Data Structure Size (100000) - Variable Insertion Index")
 ax.set_xlabel("Insertion Index")
 ax.set_ylabel("Time (s)")
 ax.legend()
