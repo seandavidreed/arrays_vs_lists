@@ -10,6 +10,7 @@ Node* create_node(unsigned val);
 Node* create_nsize_list(unsigned n, Node** tail);
 void attach(Node* iter, Node* new_node);
 Node* insert(Node* iter, Node* tail, Node* new_node, unsigned pos);
+Node* insert_optimized(Node* iter, Node* tail, Node* new_node, unsigned pos, unsigned n);
 Node* append(Node* tail, Node* new_node);
 void destroy(Node* iter);
 void print_list(Node* iter);
@@ -64,6 +65,30 @@ Node* insert(Node* iter, Node* tail, Node* new_node, unsigned pos) {
 		iter->next = new_node;
 		new_node->prev = iter;
 		return new_node;
+	}
+}
+
+Node* insert_optimized(Node* iter, Node* tail, Node* new_node, unsigned pos, unsigned n) {
+	if (pos < (int) n / 2) {
+		insert(iter, tail, new_node, pos);
+	}
+	else {
+		iter = tail;
+		unsigned i = n - 1;
+		for (; i > pos; i--) {
+			if (iter->prev == NULL) break;
+			iter = iter->prev;
+		}
+
+		if (i < n - 1) {
+			attach(iter, new_node);
+			return tail;
+		}
+		else {
+			iter->next = new_node;
+			new_node->prev = iter;
+			return new_node;
+		}
 	}
 }
 
