@@ -1,3 +1,5 @@
+# ifndef LIST_H
+# define LIST_H
 
 // Maximum value that can be stored in unsigned: (2^32) - 1
 static const unsigned MAX = 4294967295;
@@ -87,3 +89,5 @@ void print_list(Node* iter) {
 	}
 	printf("\n");
 }
+
+# endif

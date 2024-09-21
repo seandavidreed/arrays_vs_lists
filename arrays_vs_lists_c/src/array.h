@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-
+# ifndef ARRAY_H
+# define ARRAY_H
 
 typedef struct Array {
     unsigned* data;
@@ -54,3 +53,5 @@ void print_array(Array* arr) {
     }
     printf("\n");
 }
+
+# endif
