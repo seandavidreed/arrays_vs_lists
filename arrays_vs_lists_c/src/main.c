@@ -11,34 +11,30 @@
 double test_list(unsigned n, unsigned insert_idx);
 double test_array(unsigned n, unsigned insert_idx);
 void test_changing_n(int cycles, unsigned batches_n[], double list_runtimes[], double array_runtimes[]);
-void test_changing_insertion(double list_runtimes[], double array_runtimes[]);
-void save_results(int cycles, unsigned batches_n[], double list_runtimes[], double array_runtimes[]);
-void save_test2_results(double list_runtimes2[], double array_runtimes2[]);
+void test_changing_insert(double list_runtimes[], double array_runtimes[]);
+void save_changing_n_results(int cycles, unsigned batches_n[], double list_runtimes[], double array_runtimes[]);
+void save_changing_insert_results(double list_runtimes[], double array_runtimes[]);
 
-int main() {
-	// Declare variables
-	int cycles = 100;
-	double array_runtimes[cycles];
-	double list_runtimes[cycles];
-
-	double list_runtimes2[1000];
-	double array_runtimes2[1000];
-
-	// unsigned batches_n[cycles];
-
-	// // Initialize batches
-	// batches_n[0] = 1000000;
-	// for (int i = 1; i < cycles; i++) {
-	// 	batches_n[i] = batches_n[i - 1] + 100000;
-	// }
-
-	// Run tests
-	//test_changing_n(cycles, batches_n, list_runtimes, array_runtimes);
-	test_changing_insertion(list_runtimes2, array_runtimes2);
-
-	// Write results to CSV file
-	//save_results(cycles, batches_n, list_runtimes, array_runtimes);
-	save_test2_results(list_runtimes2, array_runtimes2);
+int main(int argc, char* argv[]) {
+	if (!strcmp(argv[1], "0")) {
+		int cycles = 100;
+		double array_runtimes[cycles];
+		double list_runtimes[cycles];
+		unsigned batches_n[cycles];
+		// Initialize batches
+		batches_n[0] = 1000000;
+		for (int i = 1; i < cycles; i++) {
+			batches_n[i] = batches_n[i - 1] + 100000;
+		}
+		test_changing_n(cycles, batches_n, list_runtimes, array_runtimes);
+		save_changing_n_results(cycles, batches_n, list_runtimes, array_runtimes);
+	}
+	else {
+		double list_runtimes[1000];
+		double array_runtimes[1000];
+		test_changing_insert(list_runtimes, array_runtimes);
+		save_changing_insert_results(list_runtimes, array_runtimes);
+	}
 
 	return 0;
 }
@@ -92,7 +88,7 @@ void test_changing_n(int cycles, unsigned batches_n[], double list_runtimes[], d
 	}
 }
 
-void test_changing_insertion(double list_runtimes2[], double array_runtimes2[]) {
+void test_changing_insert(double list_runtimes2[], double array_runtimes2[]) {
 	double runtime = 0.0;
 	
 	for (unsigned i = 1; i < 1000; i++) {
@@ -106,8 +102,8 @@ void test_changing_insertion(double list_runtimes2[], double array_runtimes2[]) 
 	}
 }
 
-void save_results(int cycles, unsigned batches_n[], double list_runtimes[], double array_runtimes[]) {
-	FILE* fp = fopen("results.csv", "w");
+void save_changing_n_results(int cycles, unsigned batches_n[], double list_runtimes[], double array_runtimes[]) {
+	FILE* fp = fopen("data/test1_results.csv", "w");
 	char result[20000] = {};
 
 	strcat(result, "Elements,List,Array\n");
@@ -121,14 +117,14 @@ void save_results(int cycles, unsigned batches_n[], double list_runtimes[], doub
 	fclose(fp);
 }
 
-void save_test2_results(double list_runtimes2[], double array_runtimes2[]) {
-	FILE* fp = fopen("results2.csv", "w");
+void save_changing_insert_results(double list_runtimes[], double array_runtimes[]) {
+	FILE* fp = fopen("data/test2_results.csv", "w");
 	char result[100000] = {};
 
 	strcat(result, "Insertion Index,List,Array\n");
 	for (unsigned i = 0; i < 1000; i++) {
 		char buffer[100] = {};
-		sprintf(buffer, "%u,%f,%f\n", i, list_runtimes2[i], array_runtimes2[i]);
+		sprintf(buffer, "%u,%f,%f\n", i, list_runtimes[i], array_runtimes[i]);
 		strcat(result, buffer);
 	}
 
