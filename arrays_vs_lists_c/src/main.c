@@ -115,7 +115,7 @@ void test_changing_n(int cycles) {
 	}
 
 	// Save to file
-	FILE* fp = fopen("../data/test1_results.csv", "w");
+	FILE* fp = fopen("data/test1_results.csv", "w");
 	if (fp == NULL) {
 		printf("Failed to open file.\n%s.\nExiting...\n", strerror(errno));
 		exit(1);
@@ -160,7 +160,6 @@ void test_changing_insert(bool with_optimization) {
 			array_runtimes[i] = runtime;
 		}	
 	}
-
 
 	// Format results into one string
 	char result[30000] = {"Insertion Index,List,Array\n"};
