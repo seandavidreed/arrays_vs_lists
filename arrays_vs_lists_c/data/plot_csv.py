@@ -51,8 +51,8 @@ def main():
         )
     elif sys.argv[1] == '5':
         plot_csv(
-            src="data/test4_results.csv",
-            dest="test4_results.png",
+            src="data/test5_results.csv",
+            dest="test5_results.png",
             xlabel="Insertion Index",
             ylabel="Time (s)",
             title="Constant Size (100000) - Insertion Index (random - with list optimization)"
