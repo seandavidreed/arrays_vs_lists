@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 	else if (!strcmp(argv[1], "2")) {
 		test_changing_insert(false);
 	}
-	else {
+	else if (!strcmp(argv[1], "3")) {
 		test_changing_insert(true);
 	}
 

@@ -1,0 +1,54 @@
+import pandas as pd
+import sys
+import matplotlib.pyplot as plt
+
+def plot_csv(src, dest, xlabel, ylabel, title):
+    data = pd.read_csv(src)
+
+    fig, ax = plt.subplots()
+    ax.step(data[xlabel], data['Array'], label="Array")
+    ax.step(data[xlabel], data['List'], label="List")
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.legend()
+
+    fig.savefig(dest)
+    plt.show()
+
+def main():
+    if sys.argv[1] == '1':
+        plot_csv(
+            src="data/test1_results.csv",
+            dest="test1_results.png",
+            xlabel="Elements",
+            ylabel="Time (s)",
+            title="Variable Size - Insertion Index (n / 2)"
+        )
+    elif sys.argv[1] == '2':
+        plot_csv(
+            src="data/test2_results.csv",
+            dest="test2_results.png",
+            xlabel="Insertion Index",
+            ylabel="Time (s)",
+            title="Constant Size (100000) - Variable Insertion Index"
+        )
+    elif sys.argv[1] == '3':
+        plot_csv(
+            src="data/test3_results.csv",
+            dest="test3_results.png",
+            xlabel="Insertion Index",
+            ylabel="Time (s)",
+            title="Constant Size (100000) - Variable Insertion Index (with list optimization)"
+        )
+    elif sys.argv[1] == '4':
+        plot_csv(
+            src="data/test4_results.csv",
+            dest="test4_results.png",
+            xlabel="Elements",
+            ylabel="Time (s)",
+            title="Variable Size - Insertion Index (1)"
+        )
+
+if __name__=="__main__":
+    main()  
