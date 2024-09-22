@@ -14,7 +14,9 @@ double test_list(unsigned n, unsigned insert_idx);
 double test_opt_list(unsigned n, unsigned insert_idx);
 double test_array(unsigned n, unsigned insert_idx);
 void test_changing_n(int cycles);
-void test_changing_insert(bool with_optimization);
+void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned));
+void test_random_insert(char output_file[], double (*func)(unsigned, unsigned));
+void save_to_file(char result[], char output_file[]);
 
 int main(int argc, char* argv[]) {
 
@@ -22,10 +24,13 @@ int main(int argc, char* argv[]) {
 		test_changing_n(100);
 	}
 	else if (!strcmp(argv[1], "2")) {
-		test_changing_insert(false);
+		test_changing_insert("data/test2_results.csv", &test_list);
 	}
 	else if (!strcmp(argv[1], "3")) {
-		test_changing_insert(true);
+		test_changing_insert("data/test3_results.csv", &test_opt_list);
+	}
+	else {
+		test_random_insert("data/test4_results.csv", &test_list);
 	}
 
 	return 0;
@@ -115,50 +120,26 @@ void test_changing_n(int cycles) {
 	}
 
 	// Save to file
-	FILE* fp = fopen("data/test1_results.csv", "w");
-	if (fp == NULL) {
-		printf("Failed to open file.\n%s.\nExiting...\n", strerror(errno));
-		exit(1);
-	}
-	fwrite(result, strlen(result), 1, fp);
-	fclose(fp);
+	save_to_file(result, "data/test1_results.csv");
 }
 
-void test_changing_insert(bool with_optimization) {
+void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned)) {
 
 	// Declare variables
 	int samples = 1000;
 	double runtime = 0.0;
 	double list_runtimes[samples];
 	double array_runtimes[samples];
-	char output_file[23];
 	
 	// Run cycles and collect runtimes
-	if (!with_optimization) {
-		// No list insert optimization
-		strcpy(output_file, "data/test2_results.csv");
-		for (unsigned i = 1; i < samples; i++) {
-			runtime = test_list(100000, i*100 - 1);
-			printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, i*100 - 1, runtime);
-			list_runtimes[i] = runtime;
-			
-			runtime = test_array(100000, i* 100 - 1);
-			printf("%f\n", runtime);
-			array_runtimes[i] = runtime;
-		}
-	}
-	else {
-		// With list insert optimization
-		strcpy(output_file, "data/test3_results.csv");
-		for (unsigned i = 1; i < samples; i++) {
-			runtime = test_opt_list(100000, i*100 - 1);
-			printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, i*100 - 1, runtime);
-			list_runtimes[i] = runtime;
-			
-			runtime = test_array(100000, i* 100 - 1);
-			printf("%f\n", runtime);
-			array_runtimes[i] = runtime;
-		}	
+	for (unsigned i = 1; i < samples; i++) {
+		runtime = func(100000, i*100 - 1);
+		printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, i*100 - 1, runtime);
+		list_runtimes[i] = runtime;
+		
+		runtime = test_array(100000, i* 100 - 1);
+		printf("%f\n", runtime);
+		array_runtimes[i] = runtime;
 	}
 
 	// Format results into one string
@@ -170,6 +151,45 @@ void test_changing_insert(bool with_optimization) {
 	}
 
 	// Save to file
+	save_to_file(result, output_file);
+}
+
+void test_random_insert(char output_file[], double (*func)(unsigned, unsigned)) {
+
+	// Declare variables
+	int samples = 1000;
+	double runtime = 0.0;
+	double list_runtimes[samples];
+	double array_runtimes[samples];
+
+	// Initialize random number generator
+	srand(time(0));
+	
+	// Run cycles and collect runtimes
+	for (unsigned i = 1; i < samples; i++) {
+		unsigned insert_idx = rand() % 100000;
+		runtime = func(100000, insert_idx);
+		printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, insert_idx, runtime);
+		list_runtimes[i] = runtime;
+		
+		runtime = test_array(100000, insert_idx);
+		printf("%f\n", runtime);
+		array_runtimes[i] = runtime;
+	}
+
+	// Format results into one string
+	char result[30000] = {"Insertion Index,List,Array\n"};
+	for (unsigned i = 0; i < samples; i++) {
+		char buffer[40] = {};
+		sprintf(buffer, "%u,%f,%f\n", i*100, list_runtimes[i], array_runtimes[i]);
+		strncat(result, buffer, 30);
+	}
+
+	// Save to file
+	save_to_file(result, output_file);
+}
+
+void save_to_file(char result[], char output_file[]) {
 	FILE* fp = fopen(output_file, "w");
 	if (fp == NULL) {
 		printf("Failed to open file: %s\n%s.\nExiting...\n", output_file, strerror(errno));

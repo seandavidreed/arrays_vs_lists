@@ -45,9 +45,9 @@ def main():
         plot_csv(
             src="data/test4_results.csv",
             dest="test4_results.png",
-            xlabel="Elements",
+            xlabel="Insertion Index",
             ylabel="Time (s)",
-            title="Variable Size - Insertion Index (1)"
+            title="Constant Size (100000) - Insertion Index (random)"
         )
 
 if __name__=="__main__":
