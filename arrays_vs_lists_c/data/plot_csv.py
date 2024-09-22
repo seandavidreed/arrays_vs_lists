@@ -6,8 +6,8 @@ def plot_csv(src, dest, xlabel, ylabel, title):
     data = pd.read_csv(src)
 
     fig, ax = plt.subplots()
-    ax.step(data[xlabel], data['Array'], label="Array")
-    ax.step(data[xlabel], data['List'], label="List")
+    ax.plot(data[xlabel], data['Array'], label="Array")
+    ax.plot(data[xlabel], data['List'], label="List")
     ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
@@ -48,6 +48,14 @@ def main():
             xlabel="Insertion Index",
             ylabel="Time (s)",
             title="Constant Size (100000) - Insertion Index (random)"
+        )
+    elif sys.argv[1] == '5':
+        plot_csv(
+            src="data/test4_results.csv",
+            dest="test4_results.png",
+            xlabel="Insertion Index",
+            ylabel="Time (s)",
+            title="Constant Size (100000) - Insertion Index (random - with list optimization)"
         )
 
 if __name__=="__main__":

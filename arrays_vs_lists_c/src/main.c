@@ -29,8 +29,11 @@ int main(int argc, char* argv[]) {
 	else if (!strcmp(argv[1], "3")) {
 		test_changing_insert("data/test3_results.csv", &test_opt_list);
 	}
-	else {
+	else if (!strcmp(argv[1], "4")) {
 		test_random_insert("data/test4_results.csv", &test_list);
+	}
+	else {
+		test_random_insert("data/test5_results.csv", &test_opt_list);
 	}
 
 	return 0;
@@ -157,7 +160,7 @@ void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned)
 void test_random_insert(char output_file[], double (*func)(unsigned, unsigned)) {
 
 	// Declare variables
-	int samples = 1000;
+	int samples = 100;
 	double runtime = 0.0;
 	double list_runtimes[samples];
 	double array_runtimes[samples];
