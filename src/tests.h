@@ -7,7 +7,7 @@ double test_list_ls(unsigned n, unsigned element);
 double test_opt_list(unsigned n, unsigned insert_idx);
 double test_array(unsigned n, unsigned insert_idx);
 double test_array_bs(unsigned n, unsigned element);
-void test_changing_n(int cycles);
+void test_changing_n();
 void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned));
 void test_random_insert(char output_file[], double (*func)(unsigned, unsigned));
 void test_random_element();
@@ -94,37 +94,24 @@ double test_array_bs(unsigned n, unsigned element) {
 }
 
 /* TEST 1 */
-void test_changing_n(int cycles) {
-
+void test_changing_n() {
 	// Declare variables
-	double array_runtimes[cycles];
-	double list_runtimes[cycles];
-	unsigned batches_n[cycles];
-
-	// Initialize batches
-	batches_n[0] = 1000000;
-	for (int i = 1; i < cycles; i++) {
-		batches_n[i] = batches_n[i - 1] + 100000;
-	}
+    const unsigned CYCLES = 100;
+    char result[4000] = {"Elements,List,Array\n"};
 
 	// Run cycles and collect runtimes
-	double runtime = 0.0;
-	for (int i = 0; i < cycles; i++) {
-		unsigned insert_idx = (unsigned) batches_n[i] / 2;		/* Change me */
-		runtime = test_list(batches_n[i], insert_idx);
-		printf("Cycle: %d --- Elements: %d --- Runtimes: %f --- ", i, batches_n[i], runtime);
-		list_runtimes[i] = runtime;
+	for (int i = 0; i < CYCLES; i++) {
+        unsigned batch_size = 1000000 + (100000 * i);
+		unsigned insert_idx = batch_size / 2;
 
-		runtime = test_array(batches_n[i], insert_idx);
-		printf("%f\n", runtime);
-		array_runtimes[i] = runtime;
-	}
+		double list_runtime = test_list(batch_size, insert_idx);
+		printf("Cycle: %d --- Elements: %d --- List RT: %f --- ", i, batch_size, list_runtime);
 
-	// Format results into one string
-	char result[4000] = {"Elements,List,Array\n"};
-	for (int i = 0; i < cycles; i++) {
-		char buffer[40] = {};
-		sprintf(buffer, "%u,%f,%f\n", batches_n[i], list_runtimes[i], array_runtimes[i]);
+		double array_runtime = test_array(batch_size, insert_idx);
+		printf("Array RT: %f\n", array_runtime);
+
+        char buffer[40] = {};
+		sprintf(buffer, "%u,%f,%f\n", batch_size, list_runtime, array_runtime);
 		strncat(result, buffer, 27);
 	}
 
@@ -134,29 +121,23 @@ void test_changing_n(int cycles) {
 
 /* TESTS 2 and 3 */
 void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned)) {
-
 	// Declare variables
-	int samples = 1000;
-	double runtime = 0.0;
-	double list_runtimes[samples];
-	double array_runtimes[samples];
+    const unsigned N = 100000;
+	unsigned samples = N / 100;
+    char result[30000] = {"Insertion Index,List,Array\n"};
 	
-	// Run cycles and collect runtimes
+	// Run cycles; collect and format runtimes
 	for (unsigned i = 0; i < samples; i++) {
-		runtime = func(100000, i*100);
-		printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, i*100, runtime);
-		list_runtimes[i] = runtime;
-		
-		runtime = test_array(100000, i* 100 - 1);
-		printf("%f\n", runtime);
-		array_runtimes[i] = runtime;
-	}
+        unsigned idx = i * (N / samples);
 
-	// Format results into one string
-	char result[30000] = {"Insertion Index,List,Array\n"};
-	for (unsigned i = 0; i < samples; i++) {
-		char buffer[40] = {};
-		sprintf(buffer, "%u,%f,%f\n", i*100, list_runtimes[i], array_runtimes[i]);
+		double list_runtime = func(N, idx);
+		printf("Cycle: %u --- Insert Idx: %u --- List RT: %f --- ", i, idx, list_runtime);
+		
+		double array_runtime = test_array(N, idx);
+		printf("Array RT: %f\n", array_runtime);
+
+        char buffer[40] = {};
+		sprintf(buffer, "%u,%f,%f\n", idx, list_runtime, array_runtime);
 		strncat(result, buffer, 30);
 	}
 
@@ -166,33 +147,25 @@ void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned)
 
 /* TESTS 4 and 5 */
 void test_random_insert(char output_file[], double (*func)(unsigned, unsigned)) {
-
 	// Declare variables
-	int samples = 100;
-	double runtime = 0.0;
-	double list_runtimes[samples];
-	double array_runtimes[samples];
+    const unsigned N = 100000;
+	unsigned samples = N / 1000;
+    char result[30000] = {"Sample,List,Array\n"};
 
 	// Initialize random number generator
 	srand(time(0));
 	
 	// Run cycles and collect runtimes
 	for (unsigned i = 0; i < samples; i++) {
-		unsigned insert_idx = rand() % 100000;
-		runtime = func(100000, insert_idx);
-		printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, insert_idx, runtime);
-		list_runtimes[i] = runtime;
+		unsigned insert_idx = rand() % N;
+		double list_runtime = func(N, insert_idx);
+		printf("Cycle: %u --- Insertion Index: %u --- List RT: %f --- ", i, insert_idx, list_runtime);
 		
-		runtime = test_array(100000, insert_idx);
-		printf("%f\n", runtime);
-		array_runtimes[i] = runtime;
-	}
+		double array_runtime = test_array(N, insert_idx);
+		printf("Array RT: %f\n", array_runtime);
 
-	// Format results into one string
-	char result[30000] = {"Sample,List,Array\n"};
-	for (unsigned i = 0; i < samples; i++) {
 		char buffer[40] = {};
-		sprintf(buffer, "%u,%f,%f\n", i, list_runtimes[i], array_runtimes[i]);
+		sprintf(buffer, "%u,%f,%f\n", i, list_runtime, array_runtime);
 		strncat(result, buffer, 30);
 	}
 
@@ -204,31 +177,24 @@ void test_random_insert(char output_file[], double (*func)(unsigned, unsigned)) 
 void test_random_element() {
 	
 	// Declare variables
-	int samples = 100;
-	double runtime = 0.0;
-	double list_runtimes[samples];
-	double array_runtimes[samples];
+    const unsigned N = 100000;
+	unsigned samples = N / 1000;
+    char result[30000] = {"Sample,List,Array\n"};
 
 	// Initialize random number generator
 	srand(time(0));
 	
 	// Run cycles and collect runtimes
 	for (unsigned i = 0; i < samples; i++) {
-		unsigned element = rand() % 100000;
-		runtime = test_list_ls(100000, element);
-		printf("Cycle: %u --- Element: %u --- Runtimes: %f --- ", i, element, runtime);
-		list_runtimes[i] = runtime;
+		unsigned element = rand() % N;
+		double list_runtime = test_list_ls(N, element);
+		printf("Cycle: %u --- Element: %u --- List RT: %f --- ", i, element, list_runtime);
 
-		runtime = test_array_bs(100000, element);
-		printf("%f\n", runtime);
-		array_runtimes[i] = runtime;
-	}
+		double array_runtime = test_array_bs(N, element);
+		printf("Array RT: %f\n", array_runtime);
 
-	// Format results into one string
-	char result[30000] = {"Sample,List,Array\n"};
-	for (unsigned i = 0; i < samples; i++) {
 		char buffer[40] = {};
-		sprintf(buffer, "%u,%f,%f\n", i, list_runtimes[i], array_runtimes[i]);
+		sprintf(buffer, "%u,%f,%f\n", i, list_runtime, array_runtime);
 		strncat(result, buffer, 30);
 	}
 

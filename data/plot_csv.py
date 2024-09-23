@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 def plot_csv(src, dest, xlabel, ylabel, title):
     data = pd.read_csv(src)
 
-    fig, ax = plt.subplots()
-    ax.plot(data[xlabel], data['Array'], label="Array")
-    ax.plot(data[xlabel], data['List'], label="List")
+    fig, ax = plt.subplots(figsize=(15,4.8))
+    ax.plot(data[xlabel], data['Array'], color='c', label="Array")
+    ax.plot(data[xlabel], data['List'], color='0.7', label="List")
     ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)

@@ -12,7 +12,7 @@
 int main(int argc, char* argv[]) {
 
 	if (!strcmp(argv[1], "1")) {
-		test_changing_n(100);
+		test_changing_n();
 	}
 	else if (!strcmp(argv[1], "2")) {
 		test_changing_insert("data/test2_results.csv", &test_list);
