@@ -54,7 +54,7 @@ double test_list(unsigned n, unsigned insert_idx) {
 	Node* n_node = create_node(0);
 
 	clock_t cycles = clock();
-	tail = insert(&head, tail, n_node, insert_idx);
+	insert(&head, &tail, n_node, insert_idx);
 	cycles = clock() - cycles;
 
 	destroy(head);
@@ -69,7 +69,7 @@ double test_list_ls(unsigned n, unsigned element) {
 	Node* n_node = create_node(0);
 
 	clock_t cycles = clock();
-	tail = insert_ls(&head, tail, n_node, element);
+	insert_ls(&head, &tail, n_node, element);
 	cycles = clock() - cycles;
 
 	destroy(head);
@@ -84,7 +84,7 @@ double test_opt_list(unsigned n, unsigned insert_idx) {
 	Node* n_node = create_node(0);
 
 	clock_t cycles = clock();
-	tail = insert_optimized(head, tail, n_node, insert_idx, n);
+	tail = insert_optimized(&head, &tail, n_node, insert_idx, n);
 	cycles = clock() - cycles;
 
 	destroy(head);

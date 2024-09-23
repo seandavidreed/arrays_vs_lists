@@ -8,9 +8,10 @@ static const unsigned MAX = 4294967295;
 typedef struct Node Node;
 Node* create_node(unsigned val);
 Node* create_nsize_list(unsigned n, Node** tail);
-void attach(Node* iter, Node* new_node);
-Node* insert(Node** head, Node* tail, Node* new_node, unsigned pos);
-Node* insert_optimized(Node* iter, Node* tail, Node* new_node, unsigned pos, unsigned n);
+void attach(Node** head, Node** tail, Node* iter, Node* new_node);
+void insert(Node** head, Node** tail, Node* new_node, unsigned pos);
+void insert_ls(Node** head, Node** tail, Node* new_node, unsigned element);
+Node* insert_optimized(Node** head, Node** tail, Node* new_node, unsigned pos, unsigned n);
 Node* append(Node* tail, Node* new_node);
 void destroy(Node* iter);
 void print_list(Node* iter);
@@ -43,77 +44,55 @@ Node* create_nsize_list(unsigned n, Node** tail) {
 	return head;
 }
 
-void attach(Node* iter, Node* new_node) {
+void attach(Node** head, Node** tail, Node* iter, Node* new_node) {
+	if (iter == *tail) {
+		iter->next = new_node;
+		new_node->prev = iter;
+		*tail = new_node;
+		return;
+	}
+
+	if (iter == *head) {
+		*head = iter;
+	}
+
 	new_node->next = iter;
 	new_node->prev = iter->prev;
 	iter->prev->next = new_node;
 	iter->prev = new_node;
 }
 
-Node* insert(Node** head, Node* tail, Node* new_node, unsigned pos) {
+void insert(Node** head, Node** tail, Node* new_node, unsigned pos) {
 	Node* iter = *head;
 	unsigned i = 0;
 	for (; i < pos; i++) {
 		if (iter->next == NULL) break;
 		iter = iter->next;
 	}
-
-	if (*head == iter) {
-		attach(iter, new_node);
-		*head = iter;
-		return tail;
-	}
-	else if (i == pos) {
-		attach(iter, new_node);
-		return tail;
-	}
-	else {
-		iter->next = new_node;
-		new_node->prev = iter;
-		return new_node;
-	}
+	attach(head, tail, iter, new_node);
 }
 
-Node* insert_ls(Node** head, Node* tail, Node* new_node, unsigned element) {
+void insert_ls(Node** head, Node** tail, Node* new_node, unsigned element) {
 	Node* iter = *head;
-	while (1) {
-		if (element <= iter->val) {
-			if (*head == iter) *head = iter;
-			attach(iter, new_node);
-			return tail;
-		}
-
-		if (iter->next == NULL) break;
+	while (iter) {
+		if (element <= iter->val) break;
 		iter = iter->next;
 	}
-
-	iter->next = new_node;
-	new_node->prev = iter;
-
-	return new_node;
+	attach(head, tail, iter, new_node);
 }
 
-Node* insert_optimized(Node* iter, Node* tail, Node* new_node, unsigned pos, unsigned n) {
+Node* insert_optimized(Node** head, Node** tail, Node* new_node, unsigned pos, unsigned n) {
 	if (pos < (int) n / 2) {
-		insert(&iter, tail, new_node, pos);
+		insert(head, tail, new_node, pos);
 	}
 	else {
-		iter = tail;
+		Node* iter = *tail;
 		unsigned i = n - 1;
 		for (; i > pos; i--) {
 			if (iter->prev == NULL) break;
 			iter = iter->prev;
 		}
-
-		if (i < n - 1) {
-			attach(iter, new_node);
-			return tail;
-		}
-		else {
-			iter->next = new_node;
-			new_node->prev = iter;
-			return new_node;
-		}
+		attach(head, tail, iter, new_node);
 	}
 }
 
