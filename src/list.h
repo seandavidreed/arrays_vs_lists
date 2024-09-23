@@ -9,7 +9,7 @@ typedef struct Node Node;
 Node* create_node(unsigned val);
 Node* create_nsize_list(unsigned n, Node** tail);
 void attach(Node* iter, Node* new_node);
-Node* insert(Node* iter, Node* tail, Node* new_node, unsigned pos);
+Node* insert(Node** head, Node* tail, Node* new_node, unsigned pos);
 Node* insert_optimized(Node* iter, Node* tail, Node* new_node, unsigned pos, unsigned n);
 Node* append(Node* tail, Node* new_node);
 void destroy(Node* iter);
@@ -50,14 +50,20 @@ void attach(Node* iter, Node* new_node) {
 	iter->prev = new_node;
 }
 
-Node* insert(Node* iter, Node* tail, Node* new_node, unsigned pos) {
+Node* insert(Node** head, Node* tail, Node* new_node, unsigned pos) {
+	Node* iter = *head;
 	unsigned i = 0;
 	for (; i < pos; i++) {
 		if (iter->next == NULL) break;
 		iter = iter->next;
 	}
 
-	if (i == pos) {
+	if (*head == iter) {
+		attach(iter, new_node);
+		*head = iter;
+		return tail;
+	}
+	else if (i == pos) {
 		attach(iter, new_node);
 		return tail;
 	}
@@ -68,9 +74,28 @@ Node* insert(Node* iter, Node* tail, Node* new_node, unsigned pos) {
 	}
 }
 
+Node* insert_ls(Node** head, Node* tail, Node* new_node, unsigned element) {
+	Node* iter = *head;
+	while (1) {
+		if (element <= iter->val) {
+			if (*head == iter) *head = iter;
+			attach(iter, new_node);
+			return tail;
+		}
+
+		if (iter->next == NULL) break;
+		iter = iter->next;
+	}
+
+	iter->next = new_node;
+	new_node->prev = iter;
+
+	return new_node;
+}
+
 Node* insert_optimized(Node* iter, Node* tail, Node* new_node, unsigned pos, unsigned n) {
 	if (pos < (int) n / 2) {
-		insert(iter, tail, new_node, pos);
+		insert(&iter, tail, new_node, pos);
 	}
 	else {
 		iter = tail;

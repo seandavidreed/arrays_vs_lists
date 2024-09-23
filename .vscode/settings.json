@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "*.html": "jinja-html",
-        "errno.h": "c",
-        "err.h": "c"
-    }
-}

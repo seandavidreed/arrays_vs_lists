@@ -57,6 +57,14 @@ def main():
             ylabel="Time (s)",
             title="Constant Size (100000) - Insertion Index (random - with list optimization)"
         )
+    elif sys.argv[1] == '6':
+        plot_csv(
+            src="data/test6_results.csv",
+            dest="test6_results.png",
+            xlabel="Element",
+            ylabel="Time (s)",
+            title="Constant Size (100000) - Random Element (with Binary Search Insert for Array)"
+        )
 
 if __name__=="__main__":
     main()  

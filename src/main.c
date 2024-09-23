@@ -11,11 +11,14 @@
 /* FUNCTION PROTOTYPES */
 
 double test_list(unsigned n, unsigned insert_idx);
+double test_list_ls(unsigned n, unsigned element);
 double test_opt_list(unsigned n, unsigned insert_idx);
 double test_array(unsigned n, unsigned insert_idx);
+double test_array_bs(unsigned n, unsigned element);
 void test_changing_n(int cycles);
 void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned));
 void test_random_insert(char output_file[], double (*func)(unsigned, unsigned));
+void test_random_element();
 void save_to_file(char result[], char output_file[]);
 
 int main(int argc, char* argv[]) {
@@ -32,8 +35,11 @@ int main(int argc, char* argv[]) {
 	else if (!strcmp(argv[1], "4")) {
 		test_random_insert("data/test4_results.csv", &test_list);
 	}
-	else {
+	else if (!strcmp(argv[1], "5")) {
 		test_random_insert("data/test5_results.csv", &test_opt_list);
+	}
+	else {
+		test_random_element();
 	}
 
 	return 0;
@@ -48,7 +54,22 @@ double test_list(unsigned n, unsigned insert_idx) {
 	Node* n_node = create_node(0);
 
 	clock_t cycles = clock();
-	tail = insert(head, tail, n_node, insert_idx);
+	tail = insert(&head, tail, n_node, insert_idx);
+	cycles = clock() - cycles;
+
+	destroy(head);
+
+	return (double) cycles / CLOCKS_PER_SEC;
+}
+
+double test_list_ls(unsigned n, unsigned element) {
+	Node* tail;
+	Node* head = create_nsize_list(n, &tail);
+	
+	Node* n_node = create_node(0);
+
+	clock_t cycles = clock();
+	tail = insert_ls(&head, tail, n_node, element);
 	cycles = clock() - cycles;
 
 	destroy(head);
@@ -80,6 +101,23 @@ double test_array(unsigned n, unsigned insert_idx) {
 
 	clock_t cycles = clock();
     insert_a(array, -1, insert_idx);
+	cycles = clock() - cycles;
+
+    free(array->data);
+    free(array);
+
+	return (double) cycles / CLOCKS_PER_SEC;
+}
+
+double test_array_bs(unsigned n, unsigned element) {
+	Array* array = instantiate_array();
+
+    for (int i = 0; i < n; i++) {
+        append_a(array, i);
+    }
+
+	clock_t cycles = clock();
+    insert_bs(array, element);
 	cycles = clock() - cycles;
 
     free(array->data);
@@ -190,6 +228,41 @@ void test_random_insert(char output_file[], double (*func)(unsigned, unsigned)) 
 
 	// Save to file
 	save_to_file(result, output_file);
+}
+
+void test_random_element() {
+	
+	// Declare variables
+	int samples = 100;
+	double runtime = 0.0;
+	double list_runtimes[samples];
+	double array_runtimes[samples];
+
+	// Initialize random number generator
+	srand(time(0));
+	
+	// Run cycles and collect runtimes
+	for (unsigned i = 1; i < samples; i++) {
+		unsigned element = rand() % 100000;
+		runtime = test_list_ls(100000, element);
+		printf("Cycle: %u --- Element: %u --- Runtimes: %f --- ", i, element, runtime);
+		list_runtimes[i] = runtime;
+
+		runtime = test_array_bs(100000, element);
+		printf("%f\n", runtime);
+		array_runtimes[i] = runtime;
+	}
+
+	// Format results into one string
+	char result[30000] = {"Element,List,Array\n"};
+	for (unsigned i = 0; i < samples; i++) {
+		char buffer[40] = {};
+		sprintf(buffer, "%u,%f,%f\n", i*100, list_runtimes[i], array_runtimes[i]);
+		strncat(result, buffer, 30);
+	}
+
+	// Save to file
+	save_to_file(result, "data/test6_results.csv");
 }
 
 void save_to_file(char result[], char output_file[]) {

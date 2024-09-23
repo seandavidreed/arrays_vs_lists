@@ -47,11 +47,36 @@ int insert_a(Array* arr, unsigned element, unsigned index) {
     return 0;
 }
 
+int insert_bs(Array* arr, unsigned element) {
+    if (arr->index == 0) {
+        return -1;
+    }
+
+    unsigned left = 0;
+    unsigned right = arr->index;
+    unsigned middle;
+
+    while (left < right) {
+        middle = (unsigned) ((right - left) / 2) + left;
+        if (element < arr->data[middle]) {
+            right = middle - 1;
+        }
+        else if (element > arr->data[middle]) {
+            left = middle + 1;
+        }
+        else break;
+    }
+    insert_a(arr, element, middle);
+    return 0;
+}
+
 void print_array(Array* arr) {
     for (unsigned i = 0; i < arr->index; i++) {
         printf("%d ", arr->data[i]);
     }
     printf("\n");
 }
+
+
 
 # endif
