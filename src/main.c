@@ -126,6 +126,7 @@ double test_array_bs(unsigned n, unsigned element) {
 	return (double) cycles / CLOCKS_PER_SEC;
 }
 
+/* TEST 1 */
 void test_changing_n(int cycles) {
 
 	// Declare variables
@@ -164,6 +165,7 @@ void test_changing_n(int cycles) {
 	save_to_file(result, "data/test1_results.csv");
 }
 
+/* TESTS 2 and 3 */
 void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned)) {
 
 	// Declare variables
@@ -173,9 +175,9 @@ void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned)
 	double array_runtimes[samples];
 	
 	// Run cycles and collect runtimes
-	for (unsigned i = 1; i < samples; i++) {
-		runtime = func(100000, i*100 - 1);
-		printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, i*100 - 1, runtime);
+	for (unsigned i = 0; i < samples; i++) {
+		runtime = func(100000, i*100);
+		printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, i*100, runtime);
 		list_runtimes[i] = runtime;
 		
 		runtime = test_array(100000, i* 100 - 1);
@@ -195,6 +197,7 @@ void test_changing_insert(char output_file[], double (*func)(unsigned, unsigned)
 	save_to_file(result, output_file);
 }
 
+/* TESTS 4 and 5 */
 void test_random_insert(char output_file[], double (*func)(unsigned, unsigned)) {
 
 	// Declare variables
@@ -207,7 +210,7 @@ void test_random_insert(char output_file[], double (*func)(unsigned, unsigned)) 
 	srand(time(0));
 	
 	// Run cycles and collect runtimes
-	for (unsigned i = 1; i < samples; i++) {
+	for (unsigned i = 0; i < samples; i++) {
 		unsigned insert_idx = rand() % 100000;
 		runtime = func(100000, insert_idx);
 		printf("Cycle: %u --- Insertion Index: %u --- Runtimes: %f --- ", i, insert_idx, runtime);
@@ -230,6 +233,7 @@ void test_random_insert(char output_file[], double (*func)(unsigned, unsigned)) 
 	save_to_file(result, output_file);
 }
 
+/* TEST 6 */
 void test_random_element() {
 	
 	// Declare variables
@@ -242,7 +246,7 @@ void test_random_element() {
 	srand(time(0));
 	
 	// Run cycles and collect runtimes
-	for (unsigned i = 1; i < samples; i++) {
+	for (unsigned i = 0; i < samples; i++) {
 		unsigned element = rand() % 100000;
 		runtime = test_list_ls(100000, element);
 		printf("Cycle: %u --- Element: %u --- Runtimes: %f --- ", i, element, runtime);

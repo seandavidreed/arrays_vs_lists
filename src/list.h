@@ -51,15 +51,19 @@ void attach(Node** head, Node** tail, Node* iter, Node* new_node) {
 		*tail = new_node;
 		return;
 	}
-
-	if (iter == *head) {
-		*head = iter;
+	else if (iter == *head) {
+		*head = new_node;
+		iter->prev = new_node;
+		new_node->next = iter;
+		return;
 	}
-
-	new_node->next = iter;
-	new_node->prev = iter->prev;
-	iter->prev->next = new_node;
-	iter->prev = new_node;
+	else {
+		new_node->next = iter;
+		new_node->prev = iter->prev;
+		iter->prev->next = new_node;
+		iter->prev = new_node;
+	}
+	
 }
 
 void insert(Node** head, Node** tail, Node* new_node, unsigned pos) {
