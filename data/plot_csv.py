@@ -45,7 +45,7 @@ def main():
         plot_csv(
             src="data/test4_results.csv",
             dest="test4_results.png",
-            xlabel="Insertion Index",
+            xlabel="Sample",
             ylabel="Time (s)",
             title="Constant Size (100000) - Insertion Index (random)"
         )
@@ -53,7 +53,7 @@ def main():
         plot_csv(
             src="data/test5_results.csv",
             dest="test5_results.png",
-            xlabel="Insertion Index",
+            xlabel="Sample",
             ylabel="Time (s)",
             title="Constant Size (100000) - Insertion Index (random - with list optimization)"
         )
@@ -61,7 +61,7 @@ def main():
         plot_csv(
             src="data/test6_results.csv",
             dest="test6_results.png",
-            xlabel="Element",
+            xlabel="Sample",
             ylabel="Time (s)",
             title="Constant Size (100000) - Random Element (with Binary Search Insert for Array)"
         )

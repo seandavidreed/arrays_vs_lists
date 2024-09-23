@@ -4,7 +4,7 @@
 // Maximum value that can be stored in unsigned: (2^32) - 1
 static const unsigned MAX = 4294967295;
 
-// Declarations
+/* FUNCTION PROTOTYPES */
 typedef struct Node Node;
 Node* create_node(unsigned val);
 Node* create_nsize_list(unsigned n, Node** tail);
@@ -16,7 +16,7 @@ Node* append(Node* tail, Node* new_node);
 void destroy(Node* iter);
 void print_list(Node* iter);
 
-// Definitions
+/* FUNCTION DEFINITIONS */
 typedef struct Node {
 	int val;
 	struct Node* next;

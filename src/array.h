@@ -7,6 +7,14 @@ typedef struct Array {
     unsigned capacity;
 } Array;
 
+/* FUNCTION PROTOTYPES */
+Array* instantiate_array();
+void append_a(Array* arr, unsigned element);
+int insert_a(Array* arr, unsigned element, unsigned index);
+int insert_bs(Array* arr, unsigned element);
+void print_array(Array* arr);
+
+/* FUNCTION DEFINITIONS */
 Array* instantiate_array() {
     Array* array = (Array*) malloc(sizeof(Array));
     array->data = (unsigned*) malloc(sizeof(unsigned) * 4);
@@ -76,7 +84,5 @@ void print_array(Array* arr) {
     }
     printf("\n");
 }
-
-
 
 # endif
