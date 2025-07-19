@@ -8,22 +8,30 @@ cd array_vs_lists
 
 Install Python libraries `pandas` and `matplotlib`.
 
+- [pandas installation](https://pandas.pydata.org/pandas-docs/stable/getting_started/install.html)
+- [matplotlib installation](https://matplotlib.org/stable/install/index.html)
+
 Run the bash script with an argument specifying which test to run.
 
 ```
 ./run_test.sh <arg>
+# Example: ./run_test.sh 2
 ```
 
 Arguments:
-1. Insert into the middle of each data structure with sizes ranging $[1,\ 1000000]$. 
-2. Varied insertion indexes $[1,\ 1000000]$ with data structures of constant size $100000$.
+
+1. Insert into the middle of each data structure with sizes ranging $`[1,\ 1000000]`$. 
+2. Varied insertion indexes $`[1,\ 1000000]`$ with data structures of constant size $`100000`$.
 3. Same as test 2, but with an added optimization for the list: linear search can start from either the head or tail depending on which is more optimal for the given insertion index.
-4. Random insertion indexes with data structures of constant size $10000$.
+4. Random insertion indexes with data structures of constant size $`10000`$.
 5. Same as test 4, but with the same list optimization as before.
 
 # Purpose of This Codebase
+## Bjarne Stroustrup’s Claim
+[Vector vs. List](https://youtu.be/SfkMiGFVhZo?si=vDlHbAw8UEf-0nOY&t=44m50s)
+
 ## Vectors are generally better than linked lists
-Common reasoning says that if you need a data structure that supports frequent element insertions, a _linked list_ with its $O(1)$ insertion time is a better choice than a _vector_ with its $O(m)$ insertion time, where $m$ is the number of elements that must be right-shifted to make space. However, this misses the point that linear search must always be conducted first to _find_ the insertion point in a list, and that will also take $O(m)$, where $m$ is the number of nodes that must be stepped through. In terms of insertion cost then, lists and vectors are quite similar.
+Common reasoning says that if you need a data structure that supports frequent element insertions, a _linked list_ with its $`O(1)`$ insertion time is a better choice than a _vector_ with its $`O(m)`$ insertion time, where $m$ is the number of elements that must be right-shifted to make space. However, this misses the point that linear search must always be conducted first to _find_ the insertion point in a list, and that will also take $`O(m)`$, where $`m`$ is the number of nodes that must be stepped through. In terms of insertion cost then, lists and vectors are quite similar.
 
 What makes vectors superior is their compactness and predictability, attributes that are achieved with contiguous memory allocation. Lists, on the other hand, are scattered throughout memory. It is simply more efficient to iterate through contiguous memory than non-contiguous memory.
 
@@ -31,10 +39,10 @@ Moreover, the vector can make use of the CPU cache, which can pre-fetch large ba
 
 ## Maybe Demonstrating the Superiority of Vectors Over Lists
 I put Bjarne Stroustrup's words to the test by creating dynamic arrays and linked lists in C and putting them through several tests. I experimented with insertions into both data structures. Here are the tests I used.
-1. Insert into the middle of each data structure with sizes ranging $[1,\ 1000000]$. 
-2. Varied insertion indexes $[1,\ 1000000]$ with data structures of constant size $100000$.
+1. Insert into the middle of each data structure with sizes ranging $`[1,\ 1000000]`$. 
+2. Varied insertion indexes $`[1,\ 1000000]`$ with data structures of constant size $`100000`$.
 3. Same as test 2, but with an added optimization for the list: linear search can start from either the head or tail depending on which is more optimal for the given insertion index.
-4. Random insertion indexes with data structures of constant size $10000$.
+4. Random insertion indexes with data structures of constant size $`10000`$.
 5. Same as test 4, but with the same list optimization as before.
 Findings:
 1. Test 1 shows that when inserting into the middle of a data structure, no matter the size, the array is more efficient than the list. This seems to coincide with Stroustrup's argument that the lists linear search is the bottleneck that makes the difference.
