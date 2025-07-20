@@ -51,9 +51,9 @@ Findings:
 4. Generally speaking, these two data structures can be made to have similar run times, but the array still wins in terms of compactness, predictability, and its ability to make use of the CPU cache.
 
 ## Results
-![](test1_results.png)
-![](test2_results.png)
-![](test3_results.png)
-![](test4_results.png)
-![](test5_results.png)
-![](test6_results.png)
+![](data/test1_results.png)
+![](data/test2_results.png)
+![](data/test3_results.png)
+![](data/test4_results.png)
+![](data/test5_results.png)
+![](data/test6_results.png)

@@ -20,7 +20,7 @@ def main():
     if sys.argv[1] == '1':
         plot_csv(
             src="data/test1_results.csv",
-            dest="test1_results.png",
+            dest="data/test1_results.png",
             xlabel="Elements",
             ylabel="Time (s)",
             title="Variable Size - Insertion Index (n / 2)"
@@ -28,7 +28,7 @@ def main():
     elif sys.argv[1] == '2':
         plot_csv(
             src="data/test2_results.csv",
-            dest="test2_results.png",
+            dest="data/test2_results.png",
             xlabel="Insertion Index",
             ylabel="Time (s)",
             title="Constant Size (100000) - Variable Insertion Index"
@@ -36,7 +36,7 @@ def main():
     elif sys.argv[1] == '3':
         plot_csv(
             src="data/test3_results.csv",
-            dest="test3_results.png",
+            dest="data/test3_results.png",
             xlabel="Insertion Index",
             ylabel="Time (s)",
             title="Constant Size (100000) - Variable Insertion Index (with list optimization)"
@@ -44,7 +44,7 @@ def main():
     elif sys.argv[1] == '4':
         plot_csv(
             src="data/test4_results.csv",
-            dest="test4_results.png",
+            dest="data/test4_results.png",
             xlabel="Sample",
             ylabel="Time (s)",
             title="Constant Size (100000) - Insertion Index (random)"
@@ -52,7 +52,7 @@ def main():
     elif sys.argv[1] == '5':
         plot_csv(
             src="data/test5_results.csv",
-            dest="test5_results.png",
+            dest="data/test5_results.png",
             xlabel="Sample",
             ylabel="Time (s)",
             title="Constant Size (100000) - Insertion Index (random - with list optimization)"
@@ -60,7 +60,7 @@ def main():
     elif sys.argv[1] == '6':
         plot_csv(
             src="data/test6_results.csv",
-            dest="test6_results.png",
+            dest="data/test6_results.png",
             xlabel="Sample",
             ylabel="Time (s)",
             title="Constant Size (100000) - Random Element (with Binary Search Insert for Array)"
