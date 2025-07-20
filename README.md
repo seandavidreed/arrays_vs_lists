@@ -27,11 +27,10 @@ Arguments:
 5. Same as test 4, but with the same list optimization as before.
 
 # Purpose of This Codebase
-## Bjarne Stroustrup’s Claim
+## Bjarne Stroustrup’s Claim: Vectors are generally better than linked lists
 [Vector vs. List](https://youtu.be/SfkMiGFVhZo?si=vDlHbAw8UEf-0nOY&t=44m50s)
 
-## Vectors are generally better than linked lists
-Common reasoning says that if you need a data structure that supports frequent element insertions, a _linked list_ with its $`O(1)`$ insertion time is a better choice than a _vector_ with its $`O(m)`$ insertion time, where $m$ is the number of elements that must be right-shifted to make space. However, this misses the point that linear search must always be conducted first to _find_ the insertion point in a list, and that will also take $`O(m)`$, where $`m`$ is the number of nodes that must be stepped through. In terms of insertion cost then, lists and vectors are quite similar.
+Common reasoning says that if you need a data structure that supports frequent element insertion and deletion, a _linked list_ with its $`O(1)`$ insertion time is a better choice than a _vector_ with its $`O(m)`$ insertion time, where $m$ is the number of elements that must be right-shifted to make space. However, this misses the point that linear search must always be conducted first to _find_ the insertion point in a list, and that will also take $`O(m)`$, where $`m`$ is the number of nodes that must be stepped through. In terms of insertion cost then, lists and vectors are quite similar.
 
 What makes vectors superior is their compactness and predictability, attributes that are achieved with contiguous memory allocation. Lists, on the other hand, are scattered throughout memory. It is simply more efficient to iterate through contiguous memory than non-contiguous memory.
 
