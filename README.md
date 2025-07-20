@@ -8,6 +8,12 @@ cd array_vs_lists
 
 Install Python libraries `pandas` and `matplotlib`.
 
+```
+pip3 install pandas
+pip3 install matplotlib
+```
+
+Or install with another method.
 - [pandas installation](https://pandas.pydata.org/pandas-docs/stable/getting_started/install.html)
 - [matplotlib installation](https://matplotlib.org/stable/install/index.html)
 
